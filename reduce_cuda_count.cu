@@ -43,9 +43,9 @@ __global__ void parallel_hashtag_extracting(char* d_buffer, int buffer_size,
         int start_position = d_hashtag_positions[idx];
         int tag_len = 0;
 
-        for (int i = start_position; i < buffer_size && tag_len < MAX_TAGS_LEN-1; i++)
+        for (int i = start_position+1; i < buffer_size && tag_len < MAX_TAGS_LEN-1; i++)
         {
-            if (!isValidHashtagChar(d_buffer[i]) || d_buffer[i] == '\n' || (d_buffer[i] == '#' && i != start_position))
+            if (!isValidHashtagChar(d_buffer[i]) || d_buffer[i] == '\n')
             {
                 break;
             }

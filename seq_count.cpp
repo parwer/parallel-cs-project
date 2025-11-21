@@ -33,9 +33,9 @@ void count_hashtag(char** h_str, int* h_len, int numstr, char hashtags[MAX_TAGS]
             {
                 char hashtag[MAX_TAGS_LEN];
                 int tag_len = 0;
-                for (int k = j; s[k] != '\0'; k++)
+                for (int k = j+1; s[k] != '\0'; k++)
                 {
-                    if (!isValidHashtagChar(s[k]) || (s[k] == '#' && k != j) || tag_len >= MAX_TAGS_LEN-1)
+                    if (!isValidHashtagChar(s[k]) || tag_len >= MAX_TAGS_LEN-1)
                     {
                         break;
                     }
@@ -65,7 +65,6 @@ void count_hashtag(char** h_str, int* h_len, int numstr, char hashtags[MAX_TAGS]
             }
         }
     }
-
 }
 
 
