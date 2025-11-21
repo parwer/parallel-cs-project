@@ -71,7 +71,7 @@ __global__ void unique_count_hashtags(char (*d_hashtags)[MAX_TAGS_LEN], int hash
             tag_len++;
         }
 
-        if (tag_len <= 1)
+        if (tag_len == 1)
         {
             return;
         }
