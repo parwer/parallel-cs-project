@@ -78,57 +78,39 @@ __global__ void unique_count_hashtags(char (*d_hashtags)[MAX_TAGS_LEN], int hash
 
         // tag exist?
         bool tag_exist = false;
-        int existing_pos = -1;
-        
-        for (int attempt = 0; attempt < 2 && !tag_exist; attempt++)
+        for (int i = 0; i < *d_unique_count; i++)
         {
-            int current_count = *d_unique_count;
-            
-            for (int i = 0; i < current_count; i++)
+            bool match = true;
+            for (int j = 0; j < tag_len; j++)
             {
-                bool match = true;
-                for (int j = 0; j < tag_len; j++)
+                if (hashtag[j] != d_unique_hashtags[i][j])
                 {
-                    if (hashtag[j] != d_unique_hashtags[i][j])
-                    {
-                        match = false;
-                        break;
-                    }
-                }
-
-                if (match && d_unique_hashtags[i][tag_len] == '\0')
-                {
-                    existing_pos = i;
-                    tag_exist = true;
+                    match = false;
                     break;
                 }
             }
-            
-            if (!tag_exist && attempt == 0)
+
+            if (match && d_unique_hashtags[i][tag_len] == '\0')
             {
-                __threadfence();
+                atomicAdd(&d_unique_counts[i], 1);
+                tag_exist = true;
+                break;
             }
         }
 
-        if (tag_exist)
-        {
-            atomicAdd(&d_unique_counts[existing_pos], 1);
-        }
-        else
+        // init new hashtag
+        if (!tag_exist)
         {
             int cur_len_tag = atomicAdd(d_unique_count, 1);
-            
             if (cur_len_tag < MAX_TAGS)
             {
                 for (int j = 0; j < tag_len; j++)
                 {
                     d_unique_hashtags[cur_len_tag][j] = hashtag[j];
                 }
-                d_unique_hashtags[cur_len_tag][tag_len] = '\0';
-                
-                __threadfence();
-                d_unique_counts[cur_len_tag] = 1;
             }
+            d_unique_hashtags[cur_len_tag][tag_len] = '\0';
+            d_unique_counts[cur_len_tag] = 1;
         }
     }
 }

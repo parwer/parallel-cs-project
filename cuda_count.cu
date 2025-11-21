@@ -46,44 +46,30 @@ __global__ void parallel_hashtag_count(char **d_str, int *d_len, int numstr, cha
 
                 // counting
                 bool tag_exist = false;
-                int existing_pos = -1;
-                
-                for (int attempt = 0; attempt < 2 && !tag_exist; attempt++)
+                for (int k = 0; k < *d_tags_count; k++)
                 {
-                    int current_count = *d_tags_count;
+                    bool match = true;
                     
-                    for (int k = 0; k < current_count; k++)
+                    // strcmp
+                    for (int l = 0; l < tag_len; l++)
                     {
-                        // str cmp
-                        bool match = true;
-                        for (int l = 0; l < tag_len; l++)
+                        if (hashtag[l] != d_hashtags[k][l])
                         {
-                            if (hashtag[l] != d_hashtags[k][l])
-                            {
-                                match = false;
-                                break;
-                            }
-                        }
-
-                        if (match && d_hashtags[k][tag_len] == '\0')
-                        {
-                            existing_pos = k;
-                            tag_exist = true;
+                            match = false;
                             break;
                         }
                     }
-                    
-                    if (!tag_exist && attempt == 0)
+
+                    if (match && d_hashtags[k][tag_len] == '\0')
                     {
-                        __threadfence();
+                        atomicAdd(&d_tag_count[k], 1);
+                        tag_exist = true;
+                        break;
                     }
                 }
 
-                if (tag_exist)
-                {
-                    atomicAdd(&d_tag_count[existing_pos], 1);
-                }
-                else
+                // init new hashtag
+                if (!tag_exist)
                 {
                     int cur_len_tags = atomicAdd(d_tags_count, 1);
                     if (cur_len_tags < MAX_TAGS)
@@ -93,8 +79,6 @@ __global__ void parallel_hashtag_count(char **d_str, int *d_len, int numstr, cha
                             d_hashtags[cur_len_tags][l] = hashtag[l];
                         }
                         d_hashtags[cur_len_tags][tag_len] = '\0';
-                        
-                        __threadfence();
                         d_tag_count[cur_len_tags] = 1;
                     }
                 }
