@@ -35,7 +35,7 @@ __global__ void parallel_hashtag_count(char **d_str, int *d_len, int numstr, cha
                 int tag_len = 0;
                 for (int j = i; s[j] != '\0'; j++)
                 {
-                    if (isValidHashtagChar(s[j]) || tag_len >= MAX_TAGS_LEN-1 || (s[j] == '#' && j != i))
+                    if (!isValidHashtagChar(s[j]) || tag_len >= MAX_TAGS_LEN-1 || (s[j] == '#' && j != i))
                     {
                         break;
                     }
