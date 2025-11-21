@@ -79,6 +79,7 @@ __global__ void parallel_hashtag_count(char **d_str, int *d_len, int numstr, cha
                             d_hashtags[cur_len_tags][l] = hashtag[l];
                         }
                         d_hashtags[cur_len_tags][tag_len] = '\0';
+                        __threadfence();
                         d_tag_count[cur_len_tags] = 1;
                     }
                 }
@@ -225,6 +226,9 @@ int main(int argc, char* argv[])
     cudaFree(d_buffer);
     cudaFree(d_str);
     cudaFree(d_len);
+    cudaFree(d_hashtags);
+    cudaFree(d_tag_count);
+    cudaFree(d_tags_count);
 
     cudaEventDestroy(start);
     cudaEventDestroy(stop);
