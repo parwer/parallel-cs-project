@@ -110,6 +110,7 @@ __global__ void unique_count_hashtags(char (*d_hashtags)[MAX_TAGS_LEN], int hash
                 }
             }
             d_unique_hashtags[cur_len_tag][tag_len] = '\0';
+            __threadfence();
             d_unique_counts[cur_len_tag] = 1;
         }
     }
