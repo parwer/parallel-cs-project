@@ -187,9 +187,9 @@ int main(int argc, char* argv[])
     int *d_unique_count;
 
     cudaMalloc(&d_buffer, total_size);
-    cudaMalloc(&d_hashtag_positions, MAX_TAGS * sizeof(int));
+    cudaMalloc(&d_hashtag_positions, numstr * sizeof(int));
     cudaMalloc(&d_hashtag_count, sizeof(int));
-    cudaMalloc(&d_hashtags, MAX_TAGS * MAX_TAGS_LEN * sizeof(char));
+    cudaMalloc(&d_hashtags, numstr * MAX_TAGS_LEN * sizeof(char));
     cudaMalloc(&d_unique_hashtags, MAX_TAGS * MAX_TAGS_LEN * sizeof(char));
     cudaMalloc(&d_unique_counts, MAX_TAGS * sizeof(int));
     cudaMalloc(&d_unique_count, sizeof(int));
