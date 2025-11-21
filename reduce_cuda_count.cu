@@ -240,10 +240,10 @@ int main(int argc, char* argv[])
     cudaMemcpy(h_unique_counts, d_unique_counts, MAX_TAGS * sizeof(int), cudaMemcpyDeviceToHost);
     cudaMemcpy(&h_unique_count, d_unique_count, sizeof(int), cudaMemcpyDeviceToHost);
     
-    for (int i = 0; i < h_unique_count && i < 20; i++)
-    {
-        cout << h_unique_counts[i] << "\t: " << h_unique_hashtags[i] << endl;
-    }
+    // for (int i = 0; i < h_unique_count && i < 20; i++)
+    // {
+    //     cout << h_unique_counts[i] << "\t: " << h_unique_hashtags[i] << endl;
+    // }
 
     // // Cleanup
     delete[] h_buffer;

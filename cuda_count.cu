@@ -212,10 +212,10 @@ int main(int argc, char* argv[])
     cudaMemcpy(h_tag_count, d_tag_count, MAX_TAGS * sizeof(int), cudaMemcpyDeviceToHost);
     cudaMemcpy(&h_tags_count, d_tags_count, sizeof(int), cudaMemcpyDeviceToHost);
 
-    for (int i = 0; i < h_tags_count && i < 20; i++)
-    {
-        cout << h_tag_count[i] << "\t:" << h_hashtags[i] << endl;
-    }
+    // for (int i = 0; i < h_tags_count && i < 20; i++)
+    // {
+    //     cout << h_tag_count[i] << "\t:" << h_hashtags[i] << endl;
+    // }
 
     // // Cleanup
     delete[] h_buffer;

@@ -120,10 +120,10 @@ int main(int argc, char* argv[])
     count_hashtag(h_str, h_len, numstr, hashtags, tag_count, &tags_count);
     auto end = chrono::high_resolution_clock::now();
 
-    for (int i = 0; i < 20; i++)
-    {
-        cout << tag_count[i] << "\t:" << hashtags[i] << endl;
-    }
+    // for (int i = 0; i < 20; i++)
+    // {
+    //     cout << tag_count[i] << "\t:" << hashtags[i] << endl;
+    // }
 
     std::chrono::duration<double, std::milli> elapsed = end - start;
 
